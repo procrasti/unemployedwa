@@ -4,10 +4,19 @@ img {
     text-align: center;
 }
 
-.grid-container {
-  /* display: inline-grid;
-  grid-template-columns: auto; */
+.centered {
   text-align: center;
   word-wrap: break-word;
 }
 
+.left {
+  text-align: left;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.small {
+    font-size: x-small;
+}
