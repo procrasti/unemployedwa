@@ -4,25 +4,44 @@ services:
     dev:
         image: nginx
         ports:
-            - "8000:80"
+            - "8000:80" # development port
             # - "80:80"
             # - 443
         volumes:
             - ./content:/usr/share/nginx/html
 
-    prod:
+    certbot:
         image: staticfloat/nginx-certbot
         ports:
-            - "80:80"
-            - "81:81"
-            - "82:82"
-            - "443:443"
+            - "80:81"    # certbot
+        volumes:
+            - ./nginx-conf.d/certbot.conf:/etc/nginx/conf.d/certbot.conf
+            - certbot:/etc/letsencrypt
+
+    proxyapp:
+        image: staticfloat/nginx-certbot
+        ports:
+            - "82:82"    # proxy app
+        volumes:
+            - ./nginx-conf.d/proxyapp.conf:/etc/nginx/conf.d/proxyapp.conf
+
+    ssl:
+        image: staticfloat/nginx-certbot
+        ports:
+            - "443:443"  # ssl
+        volumes:
+            - ./nginx-conf.d/ssl.conf:/etc/nginx/conf.d/ssl.conf
+            - certbot:/etc/letsencrypt
+
+    prod:
+        image: staticfloat/nginx-certbot
         links:
             - app
         volumes:
             - ./content:/usr/share/nginx/html
-            - ./nginx-conf.d:/etc/nginx/conf.d
-            - unemployedwa-certbot:/etc/letsencrypt
+            # - ./nginx-conf.d:/etc/nginx/conf.d
+            - ./nginx-conf.d/default.conf:/etc/nginx/conf.d/default.conf
+            - certbot:/etc/letsencrypt
 
     app:
         image: nginx
@@ -32,5 +51,5 @@ services:
             - ./content:/usr/share/nginx/html
 
 volumes:
-    unemployedwa-certbot:
+    certbot:
         external: true
