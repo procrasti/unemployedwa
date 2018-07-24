@@ -5,6 +5,7 @@ services:
         image: nginx
         ports:
             - "8000:80"
+            # - "80:80"
             # - 443
         volumes:
             - ./content:/usr/share/nginx/html
@@ -21,6 +22,7 @@ services:
         volumes:
             - ./content:/usr/share/nginx/html
             - ./nginx-conf.d:/etc/nginx/conf.d
+            - unemployedwa-certbot:/etc/letsencrypt
 
     app:
         image: nginx
@@ -29,3 +31,6 @@ services:
         volumes:
             - ./content:/usr/share/nginx/html
 
+volumes:
+    unemployedwa-certbot:
+        external: true
