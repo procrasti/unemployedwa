@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+    dev:
+        image: nginx
+        ports:
+            - "8000:80"
+            # - 443
+        volumes:
+            - ./content:/usr/share/nginx/html
+
+    prod:
+        image: staticfloat/nginx-certbot
+        ports:
+            - "80:80"
+            - "81:81"
+            - "82:82"
+            - "443:443"
+        links:
+            - app
+        volumes:
+            - ./content:/usr/share/nginx/html
+            - ./nginx-conf.d:/etc/nginx/conf.d
+
+    app:
+        image: nginx
+        ports:
+            - 80
+        volumes:
+            - ./content:/usr/share/nginx/html
+
